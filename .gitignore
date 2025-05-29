@@ -9,3 +9,6 @@ models/pytorchmodel_v2.onnx
 .vscode/settings.json
 .vscode/c_cpp_properties.json
 .vscode/launch.json
+hardware_deployment/pytorchmodel_v2_quant.onnx
+hardware_deployment/pytorchmodel_v2_inferred.onnx
+hardware_deployment/pytorchmodel_v2.onnx
