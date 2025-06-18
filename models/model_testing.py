@@ -302,7 +302,79 @@ def hundretmodeltest():
     plt.grid(True)
     plt.show()
         
+def confusionMatrixTest():
+    dir_good = os.path.abspath("../data/screw/test/good")
+    dir_bad = os.path.abspath("../data/screw/test/scratch_head")
+
+    good_paths = [os.path.join(dir_good,f) for f in os.listdir(dir_good) if f.lower().endswith((".png",".jpg",".jpeg"))]
+    bad_paths = [os.path.join(dir_bad,f) for f in os.listdir(dir_bad) if f.lower().endswith((".png",".jpg",".jpeg"))]
+
+    model_name = "pytorchmodel_v2.onnx"
+    session = ort.InferenceSession(model_name)
+    input_name = session.get_inputs()[0].name
+    output_name = session.get_outputs()[0].name
+
+    good_errors = []
+    bad_errors = []
+
+    for img_path in good_paths:
+        img = preprocess_image(img_path)
+        rec = session.run([output_name],{input_name: img})[0]
+        error = compute_per_image_error(img, rec)
+        good_errors.append(error)
+
+    for img_path in bad_paths:
+        img = preprocess_image(img_path)
+        rec = session.run([output_name],{input_name: img})[0]
+        error = compute_per_image_error(img, rec)
+        bad_errors.append(error)
+
+    true_positives = 0
+    false_negatives = 0
+
+    true_negatives = 0
+    false_positives = 0
+
+    for err in good_errors:
+        if err > 0.0595:
+            false_negatives+=1
+        else:
+            true_positives+=1
+    
+    for err in bad_errors:
+        if err > 0.0595:
+            true_negatives+=1
+        else:
+            false_positives+=1
+
+
+    
+    precision = true_positives / (true_positives + false_positives) 
+    recall = true_positives / (true_positives + false_negatives)
+    f1_score = (2*precision*recall)/(precision+recall)
+
+
+    print(f"Number TP: {true_positives}")
+    print(f"Number FN: {false_negatives}")
+    print(f"Number TN: {true_negatives}")
+    print(f"Number FP: {false_positives}")
+    print(f"Precision: {precision:.4f}")
+    print(f"Recall: {recall:.4f}")
+    print(f"F1 Score: {f1_score:.4f}")
+
+    plt.figure(figsize=(6, 6))
+    plt.plot(recall, precision, 'ro')  
+    plt.xlabel("Recall")
+    plt.ylabel("Precision")
+    plt.title("Precision-Recall Point")
+    plt.xlim(0, 1)
+    plt.ylim(0, 1)
+    plt.grid(True)
+    plt.show()
+
+confusionMatrixTest()
 hundretmodeltest()
+
 
 #convert()
 

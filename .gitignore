@@ -12,3 +12,4 @@ models/pytorchmodel_v2.onnx
 hardware_deployment/pytorchmodel_v2_quant.onnx
 hardware_deployment/pytorchmodel_v2_inferred.onnx
 hardware_deployment/pytorchmodel_v2.onnx
+hardware_deployment/pytorchmodel_v2_hls4ml_ready.onnx
