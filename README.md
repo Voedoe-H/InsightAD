@@ -99,7 +99,7 @@ The trained model was evaluated using reconstruction error as the primary metric
 | Predicted Negative   | 2                   | 23                  | 
 
 
-![Precision Recall - Analysis](PrecisionRecallAnalysis.png)
+![Precision Recall - Analysis](docs/PrecisionRecallAnalysis.png)
 
 
 ### Potential Improvements
